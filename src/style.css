@@ -34,7 +34,7 @@ body::before {
     height: 100vh;
     width: stretch;
     /* REPLACE 'your-photo.jpg' WITH YOUR ACTUAL PHOTO FILENAME IN src FOLDER */
-    background-image: url('/src/celeb.png');
+    background-image: url('./celeb.png');
     background-size: cover;
     background-position: top;
     /* Grayscale makes the photo black and white */
@@ -1131,3 +1131,4 @@ body.instant-bg::before {
 .close-modal-btn:hover {
     color: var(--primary-pink);
 }
+

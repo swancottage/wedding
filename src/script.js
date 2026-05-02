@@ -1,20 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     const ASSETS = {
         imageBanks: [
-            ['/src/onk1.JPG', '/src/onk2.JPG'],
-            ['/src/par1.JPG', '/src/par2.JPG'],
-            ['/src/beige1.JPG', '/src/beige2.JPG'],
-            ['/src/red1.JPG', '/src/red3.JPG'],
-            ['/src/white1.JPG', '/src/blue1.JPG', '/src/blue2.JPG'],
-            ['/src/jean1.JPG', '/src/jean2.JPG', '/src/jean3.JPG', '/src/jean4.JPG']
+            ['./src/onk1.JPG', './src/onk2.JPG'],
+            ['./src/par1.JPG', './src/par2.JPG'],
+            ['./src/beige1.JPG', './src/beige2.JPG'],
+            ['./src/red1.JPG', './src/red3.JPG'],
+            ['./src/white1.JPG', './src/blue1.JPG', './src/blue2.JPG'],
+            ['./src/jean1.JPG', './src/jean2.JPG', './src/jean3.JPG', './src/jean4.JPG']
         ],
         bannerBanks: [
-            '/src/wide1.JPG', '/src/wide2.JPG', '/src/wide3.JPG', '/src/wide4.JPG', '/src/wide5.JPG'
+            './src/wide1.JPG', './src/wide2.JPG', './src/wide3.JPG', './src/wide4.JPG', './src/wide5.JPG'
         ],
         events: [
-            { icon: '/src/mark.png', title: 'Khan Maak Procession', time: '07:49 AM', desc: '' },
-            { icon: '/src/tea.png', title: 'Chinese Tea Ceremony', time: '08:49 AM', desc: '' },
-            { icon: '/src/celeb.png', title: 'Wedding Reception', time: '12:00 PM', desc: '(Buffet)' }
+            { icon: './src/mark.png', title: 'Khan Maak Procession', time: '07:49 AM', desc: '' },
+            { icon: './src/tea.png', title: 'Chinese Tea Ceremony', time: '08:49 AM', desc: '' },
+            { icon: './src/celeb.png', title: 'Wedding Reception', time: '12:00 PM', desc: '(Buffet)' }
         ]
     };
 
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Audio Logic ---
     // Using a beautiful classical piece (Canon in D) from Wikimedia Commons as a placeholder
-    const bgAudio = new Audio('/src/myuniverse.mp3');
+    const bgAudio = new Audio('./src/myuniverse.mp3');
     bgAudio.loop = true;
     bgAudio.volume = 0;
     let audioStarted = false;
@@ -405,3 +405,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('scroll', playMusic, { once: true, passive: true });
     document.addEventListener('touchstart', playMusic, { once: true, passive: true });
 });
+
