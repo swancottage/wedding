@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation | Eleanor & Sebastian</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- 1. Sealed Envelope Stage -->
+    <div id="seal-wrapper">
+        <div id="envelope">
+            <!-- 1. Back piece (Pink) -->
+            <div class="envelope-back"></div>
+
+            <!-- 2. Inside Card (slides up) -->
+            <div class="inner-card">
+                <img src="/src/minicard.png" alt="Invitation" class="card-image-content">
+            </div>
+
+            <!-- 3. Body (Beige front pocket) -->
+            <div class="envelope-body"></div>
+
+            <!-- 4. Flap (Beige -> Pink) -->
+            <div class="envelope-flap"></div>
+
+            <!-- 5. Crest Seal (Top layer initially) -->
+            <div id="crest-seal">
+                <img src="/src/logo2.png" alt="">
+                <!--<svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <path d="M 40 10 L 60 25 L 60 50 Q 40 70 40 70 Q 20 70 20 50 L 20 25 Z" stroke="var(--warm-gold)" stroke-width="2" fill="var(--cream)" /> 
+                    <circle cx="40" cy="30" r="8" fill="var(--primary-pink)" opacity="0.7" /> 
+                    <path d="M 32 30 L 35 22 L 40 25 L 45 22 L 48 30" stroke="var(--warm-gold)" stroke-width="1.5" fill="none" /> 
+                    <circle cx="28" cy="45" r="3" fill="var(--primary-pink)" opacity="0.8" /> 
+                    <circle cx="52" cy="45" r="3" fill="var(--primary-pink)" opacity="0.8" />
+                </svg>-->
+            </div>
+            <p class="instruction-text">— Gently tap the seal to open —</p>
+        </div>
+    </div>
+
+    <!-- 2. Actual E-Card Stage -->
+    <div id="ecard-stage" class="hidden">
+        <header class="ecard-header">
+            <!-- Position for the seal to move to -->
+            <div id="header-anchor">
+            </div>
+        </header>
+
+        <section class="parents-section">
+            <!--<div class="parents-names">Mr. & Mrs. Alexander Sterling & Mr. & Mrs. Jonathan Vance</div>-->
+            <p class="invitation-note">Together with their families, invite you to celebrate the marriage of</p>
+        </section>
+
+        <section class="names-section">
+            <div class="bride-name">Pannipa<br><span class="last-name">Kittipongpattana</span></div>
+            <div class="ampersand">&</div>
+            <div class="groom-name">Aisawan<br><span class="last-name">Petchlorlian</span></div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="gallery-wires"></div>
+        </section>
+
+        <section class="banner-section">
+            <div class="banner-overlay">
+                <div class="banner-content">
+                    <span class="heart-icon">❤</span>
+                    <h3>Our Journey Together</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="date-section fade-in">
+            <div class="date-strip">
+                <span class="day-text">Saturday</span>
+                <h2 class="big-date" id="slot-date">
+                    <span class="slot-container" data-target="8"><span class="slot-strip"></span></span> .
+                    <span class="slot-container" data-target="8"><span class="slot-strip"></span></span> .
+                    <span class="slot-container" data-target="2026"><span class="slot-strip"></span></span>
+                </h2>
+            </div>
+        </section>
+
+        <section class="schedule-section">
+            <h4 class="section-title">The Schedule</h4>
+            <div class="schedule-grid" id="schedule-grid"></div>
+        </section>
+
+        <section class="venue-section">
+            <div class="pin-icon">📍</div>
+            <h4 class="section-title-small">The Venue</h4>
+            <p class="venue-name">Grand Ballroom, Eastin Grand Hotel Phayathai</p>
+            <a href="https://maps.app.goo.gl/4xdn3cX91vaQu2aQA" target="_blank" class="map-link">Find Us
+                on Google Maps</a>
+        </section>
+
+        <section class="rsvp-section">
+            <h4 class="rsvp-title">RSVP BY JULY 15th</h4>
+            <p class="rsvp-subtitle">Your presence is the greatest gift of all</p>
+            <a href="https://forms.gle/placeholder" target="_blank" class="rsvp-button">Confirm Attendance</a>
+        </section>
+
+        <section class="theme-section">
+            <div class="theme-hashtag">#ParOnkPerfectlyOne</div>
+            <div class="theme-title">Theme: Perfectly Pastel</div>
+            <div class="color-palette">
+                <div class="color-swatch" style="background-color: #e8b8c7;"></div>
+                <div class="color-swatch" style="background-color: #edb5a9;"></div>
+                <div class="color-swatch" style="background-color: #efc8a9;"></div>
+                <div class="color-swatch" style="background-color: #f4ecbe;"></div>
+                <div class="color-swatch" style="background-color: #c1d8ba;"></div>
+                <div class="color-swatch" style="background-color: #a8cde8;"></div>
+                <div class="color-swatch" style="background-color: #a8a1cb;"></div>
+            </div>
+        </section>
+
+        <footer class="ecard-footer">
+            <p class="thank-you">Thank you for being part of our story. We can't wait to see you there.</p>
+            <div class="infinity">∞</div>
+        </footer>
+    </div>
+
+    <!-- Audio Toggle Button -->
+    <button id="audio-toggle" class="audio-toggle" aria-label="Toggle Music">🎵</button>
+
+    <script src="/src/script.js"></script>
+</body>
+
+</html>
