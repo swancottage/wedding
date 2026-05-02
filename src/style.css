@@ -1,0 +1,1133 @@
+:root {
+    --soft-beige: #FDF8F2;
+    --cream: #FFFFFF;
+    --primary-pink: #F9E4E1;
+    --pink-dark: #D1918B;
+    --warm-gold: #C5A059;
+    --gold-light: #D4AF37;
+    --text-color: #5A4A3A;
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --font-script: 'Pinyon Script', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--soft-beige);
+    color: var(--text-color);
+    font-family: var(--font-serif);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Background Photo Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: stretch;
+    /* REPLACE 'your-photo.jpg' WITH YOUR ACTUAL PHOTO FILENAME IN src FOLDER */
+    background-image: url('/src/celeb.png');
+    background-size: cover;
+    background-position: top;
+    /* Grayscale makes the photo black and white */
+    filter: grayscale(100%) contrast(1.2);
+    /* Multiply blend mode makes white pixels transparent, and dark pixels overlay the background */
+    mix-blend-mode: multiply;
+    /* Adjust this opacity to make it more or less "fainted" */
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.show-bg::before {
+    opacity: var(--bg-opacity, 0.15);
+}
+
+body.instant-bg::before {
+    transition: opacity 0.1s ease-out;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Envelope Animations --- */
+@keyframes crestToTop {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        z-index: 10;
+    }
+
+    100% {
+        top: calc(180px - 50vh);
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.6);
+        z-index: 1;
+    }
+}
+
+@keyframes envelopeOpen {
+    0% {
+        transform: rotateX(0deg);
+        z-index: 10;
+    }
+
+    100% {
+        transform: rotateX(-180deg);
+        z-index: 0;
+    }
+}
+
+@keyframes cardSlideUp {
+    0% {
+        height: 100%;
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        height: 440px;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        height: 440px;
+        transform: translate(-50%, -150%);
+    }
+}
+
+@keyframes contentMoveUp {
+    0% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* --- Jiggle & Reveal --- */
+@keyframes jiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(1deg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInEffect {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reveal States */
+.date-strip,
+.schedule-item {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.date-strip.animate-fade {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animate-pop {
+    opacity: 1 !important;
+    animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.animate-fade {
+    opacity: 0;
+    animation: fadeInEffect 1.2s ease-out forwards;
+}
+
+/* --- Envelope Logic --- */
+#seal-wrapper {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background: transparent;
+    transition: opacity 1s ease-in-out;
+}
+
+#envelope {
+    position: relative;
+    width: 80vw;
+    min-width: 300px;
+    max-width: 450px;
+    /*height: 240px;*/
+    aspect-ratio: 350 / 240;
+    perspective: 1500px;
+    background: transparent;
+}
+
+/* 1. Back piece (Lining) */
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    background: #fce4ec;
+    /* More clearly pink */
+    border: 1px solid #999;
+    border-radius: 4px;
+    z-index: 1;
+    box-shadow: inset 0 0 50px rgba(255, 182, 193, 0.3);
+}
+
+/* 2. Inside Card */
+.inner-card {
+    position: absolute;
+    width: 92%;
+    height: 100%;
+    background-color: white;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* 3. Body (Beige front pocket) */
+.envelope-body {
+    position: absolute;
+    inset: 0;
+    background-color: var(--primary-pink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L50,65 L100,0' fill='none' stroke='%23999' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    border: 1px solid #999;
+    border-top: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    z-index: 3;
+    border-radius: 4px;
+    /* Pocket shape: V-cut from top corners to center dip */
+    clip-path: polygon(0% 0%, 50% 65%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* 4. Flap (starts beige, then turns pink) */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 65%;
+    background-color: var(--primary-pink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L50,100 L100,0' fill='none' stroke='%23999' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    z-index: 4;
+    transform-origin: top;
+    transition: transform 0.8s ease-in-out, background-color 0.4s 0.2s, z-index 0s 0.8s;
+    border-top: 1px solid #999;
+}
+
+.opening .envelope-flap {
+    transform: rotateX(-180deg);
+    background-color: var(--pink-dark);
+    z-index: 0;
+}
+
+#header-anchor {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 33vw;
+    max-width: 200px;
+    min-width: 80px;
+}
+
+#crest-seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 20%;
+    aspect-ratio: 1;
+    background-color: white;
+    border: 2px solid var(--pink-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: filter 0.3s, transform 0.3s;
+}
+
+#header-anchor #crest-seal {
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+#crest-seal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#crest-seal:hover {
+    filter: brightness(1.1);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.seal-moving {
+    animation: crestToTop 1.5s cubic-bezier(0.7, 0, 0.3, 1) forwards !important;
+}
+
+
+
+/* Base state for content */
+.card-image-content {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.opening .inner-card {
+    animation: cardSlideUp 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 1.2s;
+}
+
+.opening .card-image-content {
+    /* Subtle entry expansion */
+    animation: contentScale 1.5s ease-out forwards;
+    animation-delay: 1.2s;
+}
+
+@keyframes contentScale {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* --- Photos Swaying --- */
+.photo-card-item {
+    transition: filter 0.1s linear, transform 0.1s linear, box-shadow 0.3s ease;
+    transform-origin: top center;
+    --sway-start: -2deg;
+    --sway-end: 2deg;
+    rotate: 0deg;
+    animation: sway var(--sway-speed, 4s) infinite ease-in-out;
+    animation-play-state: paused;
+    animation-delay: var(--sway-delay, 0s);
+}
+
+.photo-card-item.scrolling {
+    animation-play-state: running;
+}
+
+/* Hide initial state for animate-on-scroll */
+.animate-on-scroll {
+    opacity: 0;
+}
+
+.animate-on-scroll.active {
+    opacity: 1;
+}
+
+.card-label {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--warm-gold);
+    margin-bottom: 0.8rem;
+    opacity: 0.6;
+}
+
+.inner-card h1 {
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.divider {
+    width: 30px;
+    height: 1px;
+    background: var(--primary-pink);
+    margin: 10px 0;
+}
+
+.instruction-text {
+    position: absolute;
+    bottom: -60px;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--warm-gold);
+    opacity: 0.6;
+    letter-spacing: 1px;
+    text-align: center;
+    width: 100%;
+    left: 0;
+}
+
+/* --- E-Card Content --- */
+#ecard-stage {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-top: 150px;
+}
+
+.ecard-header {
+    height: 60px;
+}
+
+.parents-section {
+    text-align: center;
+    padding: 0 20px;
+    margin-bottom: 60px;
+}
+
+.parents-names {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #523b23;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.invitation-note {
+    font-style: italic;
+    color: #372310;
+    font-weight: bold;
+    max-width: 500px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+}
+
+/* --- Typography --- */
+.names-section {
+    text-align: center;
+    margin-bottom: 100px;
+    padding: 0 20px;
+}
+
+.bride-name,
+.groom-name {
+    font-size: 4rem;
+    font-style: italic;
+    color: var(--pink-dark);
+    line-height: 1;
+    transition: transform 0.8s ease-out;
+}
+
+.bride-name {
+    transform: translateX(-4rem);
+    opacity: 0;
+    transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1), opacity 1.2s ease-out;
+}
+
+.bride-name.active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.groom-name {
+    transform: translateX(4rem);
+    opacity: 0;
+    color: var(--text-color);
+    transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1), opacity 1.2s ease-out;
+}
+
+.groom-name.active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.ampersand {
+    font-size: 2rem;
+    color: var(--warm-gold);
+    margin: -5px 0;
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+.ampersand.active {
+    opacity: 1;
+}
+
+/* --- Gallery with striking BW effect --- */
+.gallery-section {
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.gallery-wires {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.gallery-wires::before,
+.gallery-wires::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--warm-gold), transparent);
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.gallery-wires::before {
+    top: 25%;
+}
+
+.gallery-wires::after {
+    top: 75%;
+}
+
+.photo-card-item {
+    background: white;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    width: 160px;
+    height: 210px;
+    position: relative;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: grayscale(100%) contrast(0.4) brightness(1.3);
+    transform-origin: top center;
+}
+
+.photo-card-item::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 15px;
+    background: var(--gold-light);
+    border-radius: 1px;
+}
+
+.photo-card-item.active {
+    filter: grayscale(0%) contrast(1.1) brightness(1) saturate(1.1);
+    transform: rotate(0deg) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    animation: windJiggle 3s infinite ease-in-out;
+}
+
+@keyframes windJiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(0.6deg) translateX(1px);
+    }
+
+    75% {
+        transform: rotate(-0.6deg) translateX(-1px);
+    }
+}
+
+.photo-card-item img {
+    width: 100%;
+    height: 85%;
+    object-fit: cover;
+}
+
+.card-caption {
+    font-size: 0.8rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: -0.5rem;
+    opacity: 0.8;
+}
+
+/* --- UI Elements --- */
+.banner-section {
+    height: 50vh;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-image: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop');
+    margin: 80px 0;
+    position: relative;
+}
+
+.banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-content {
+    color: white;
+    text-align: center;
+}
+
+.heart-icon {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.banner-content h3 {
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.date-section {
+    background-color: var(--primary-pink);
+    padding: 60px 20px;
+    margin-bottom: 80px;
+}
+
+.date-strip {
+    text-align: center;
+}
+
+.day-text {
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.big-date {
+    font-family: var(--font-sans);
+    font-size: 3.5rem;
+    font-weight: 500;
+    color: var(--warm-gold);
+}
+
+.schedule-section {
+    padding: 0 20px;
+    max-width: 800px;
+    margin: 0 auto 80px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--warm-gold);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+/* --- Slow Swaying Effect --- */
+@keyframes sway {
+
+    0%,
+    100% {
+        rotate: var(--sway-start);
+    }
+
+    50% {
+        rotate: var(--sway-end);
+    }
+}
+
+/* --- Slot Machine Date --- */
+.slot-container {
+    display: inline-block;
+    height: 1.2em;
+    overflow: hidden;
+    vertical-align: bottom;
+    position: relative;
+}
+
+.slot-strip {
+    display: flex;
+    flex-direction: column;
+    transition: transform 2.5s cubic-bezier(0.12, 0, 0.39, 1);
+}
+
+.slot-number {
+    height: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Enhanced Schedule --- */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.schedule-item {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.schedule-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.sched-icon {
+    /*width: 60px; 
+    height: 60px; 
+    background: var(--primary-pink); */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--warm-gold);
+    overflow: hidden;
+}
+
+.sched-icon img {
+    width: 4em;
+    height: 4em;
+    object-fit: contain;
+}
+
+.sched-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.sched-time {
+    font-size: 1rem;
+    color: #382004;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.venue-section {
+    text-align: center;
+    margin-bottom: 80px;
+    padding: 0 20px;
+}
+
+.pin-icon {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    opacity: 0.3;
+}
+
+.section-title-small {
+    font-size: 1.3rem;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.venue-name {
+    text-transform: uppercase;
+    font-family: var(--font-sans);
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.map-link {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--primary-pink);
+    color: var(--text-color);
+    text-decoration: none;
+    padding-bottom: 3px;
+}
+
+.rsvp-section {
+    background-color: var(--primary-pink);
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.rsvp-title {
+    font-family: var(--font-sans);
+    letter-spacing: 4px;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.rsvp-subtitle {
+    font-size: 1rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+.rsvp-button {
+    display: inline-block;
+    background-color: var(--text-color);
+    color: white;
+    padding: 14px 30px;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+
+.gift-section {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.gift-trigger {
+    font-family: var(--font-sans);
+    text-decoration: none;
+    color: var(--warm-gold);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+}
+
+.ecard-footer {
+    /*padding: 60px 20px 100px;*/
+    text-align: center;
+}
+
+.thank-you {
+    color: #31302e;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.infinity {
+    font-size: 4rem;
+    color: var(--warm-gold);
+    opacity: 0.3;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-title {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--warm-gold);
+    margin-bottom: 10px;
+}
+
+.modal-desc {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: 20px;
+}
+
+.qr-container {
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px dashed var(--warm-gold);
+}
+
+.qr-container img {
+    width: 100%;
+    border-radius: 6px;
+}
+
+.close-modal {
+    width: 100%;
+    background: var(--soft-beige);
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    color: var(--warm-gold);
+    font-size: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .big-date {
+        font-size: 2.5rem;
+    }
+
+    .bride-name,
+    .groom-name {
+        font-size: 3rem;
+    }
+
+    .schedule-grid {
+        gap: 20px;
+    }
+
+    .photo-card-item {
+        width: 120px;
+        height: 160px;
+    }
+}
+
+/* --- Audio Toggle Button --- */
+.audio-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--soft-beige);
+    border: 1px solid var(--warm-gold);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.audio-toggle:hover {
+    transform: scale(1.1);
+}
+
+.audio-toggle.muted {
+    background-color: #eee;
+    opacity: 0.8;
+}
+
+/* Pulsing animation when playing */
+.audio-toggle.playing {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(197, 160, 89, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+    }
+}
+
+/* --- Names & Last Names --- */
+.last-name {
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 0.25rem;
+    /* color: var(--text-color); */
+    opacity: 0.8;
+}
+
+/* --- Theme Section --- */
+.theme-section {
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 60px;
+}
+
+.theme-hashtag {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--pink-dark);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.theme-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #523b23;
+    margin-bottom: 20px;
+}
+
+.color-palette {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.color-swatch {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+/* --- Image Popup Modal --- */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.image-modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 90vh;
+    border: 10px solid white;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.image-modal.visible img {
+    transform: scale(1);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transition: color 0.2s;
+    z-index: 3001;
+}
+
+.close-modal-btn:hover {
+    color: var(--primary-pink);
+}
