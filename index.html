@@ -12,10 +12,26 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&family=Prompt:wght@300;400;500;600&family=Pridi:wght@300;400;500;600&display=swap"
         rel="stylesheet">
+    <meta property="og:title" content="Invitation to Wedding of Pannipa & Aisawan" />
+    <meta property="og:description" content="Invitation to Wedding of Pannipa & Aisawan" />
+    <meta property="og:image" content="./src/minicard.png" />
+    <meta property="og:url" content="https://swancottage.github.io/wedding" />
 </head>
 
 <body>
     <!-- 1. Sealed Envelope Stage -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+        <filter id="canvas-grain">
+            <!-- Generates the fiber-like noise -->
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
+            <!-- Gives the noise a 3D "bump" effect -->
+            <feDiffuseLighting in="noise" lighting-color="#ffffff" surfaceScale="0.5">
+                <feDistantLight azimuth="45" elevation="55" />
+            </feDiffuseLighting>
+            <!-- Multiplies the texture over the original element color -->
+            <feComposite operator="arithmetic" k1="1" k2="0" k3="0" k4="0" in2="SourceGraphic" />
+        </filter>
+    </svg>
     <div id="seal-wrapper">
         <div id="envelope">
             <!-- 1. Back piece (Pink) -->
@@ -98,7 +114,7 @@
         <section class="venue-section">
             <div class="pin-icon">📍</div>
             <h4 class="section-title-small">The Venue</h4>
-            <p class="venue-name">Grand Ballroom, Eastin Grand Hotel Phayathai</p>
+            <p class="venue-name">Grand Ballroom 6th floor<br>Eastin Grand Hotel Phayathai</p>
             <a href="https://maps.app.goo.gl/4xdn3cX91vaQu2aQA" target="_blank" class="map-link">Find Us
                 on Google Maps</a>
         </section>
@@ -126,10 +142,10 @@
         </section>
 
         <footer class="ecard-footer">
-            <p class="thank-you">Thank you for being part of our story. We can't wait to see you there.</p>
+            <p class="thank-you">Thank you for being part of our story.<br>We can't wait to see you there.</p>
             <div class="infinity">∞</div>
-            <p style="font-size: 11px; margin-top: 20px; opacity: 0.4;">©2026. Powered by AI, Crafted with Love --
-                ParOnk</p>
+            <p style="font-size: 11px; margin-top: 20px; opacity: 0.4;">©2026. Powered by AIsawan, Crafted with Love --
+                ParOnk<br><br></p>
             </foter>
 
     </div> <!-- Image Popup Modal -->
