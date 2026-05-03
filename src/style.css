@@ -6,8 +6,8 @@
     --warm-gold: #C5A059;
     --gold-light: #D4AF37;
     --text-color: #5A4A3A;
-    --font-serif: 'Cormorant Garamond', serif;
-    --font-sans: 'Montserrat', sans-serif;
+    --font-serif: 'Cormorant Garamond', 'Pridi', serif;
+    --font-sans: 'Montserrat', 'Prompt', sans-serif;
     --font-script: 'Pinyon Script', cursive;
 }
 
@@ -17,8 +17,13 @@
     box-sizing: border-box;
 }
 
-body {
+html {
     background-color: var(--soft-beige);
+    touch-action: manipulation;
+}
+
+body {
+    background-color: transparent;
     color: var(--text-color);
     font-family: var(--font-serif);
     overflow-x: hidden;
@@ -372,12 +377,7 @@ body.instant-bg::before {
     --sway-end: 2deg;
     rotate: 0deg;
     animation: sway var(--sway-speed, 4s) infinite ease-in-out;
-    animation-play-state: paused;
     animation-delay: var(--sway-delay, 0s);
-}
-
-.photo-card-item.scrolling {
-    animation-play-state: running;
 }
 
 /* Hide initial state for animate-on-scroll */
@@ -576,10 +576,8 @@ body.instant-bg::before {
 
 .photo-card-item.active {
     filter: grayscale(0%) contrast(1.1) brightness(1) saturate(1.1);
-    transform: rotate(0deg) !important;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     z-index: 10;
-    animation: windJiggle 3s infinite ease-in-out;
 }
 
 @keyframes windJiggle {
@@ -840,7 +838,7 @@ body.instant-bg::before {
 
 .rsvp-title {
     font-family: var(--font-sans);
-    letter-spacing: 4px;
+    /*letter-spacing: 4px;*/
     font-weight: 300;
     font-size: 1.2rem;
     margin-bottom: 8px;
@@ -1078,6 +1076,7 @@ body.instant-bg::before {
     border: 2px solid white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
+
 /* --- Image Popup Modal --- */
 .image-modal {
     position: fixed;
@@ -1105,7 +1104,7 @@ body.instant-bg::before {
     max-height: 90vh;
     border: 10px solid white;
     border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transform: scale(0.9);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -1123,7 +1122,7 @@ body.instant-bg::before {
     color: white;
     font-size: 40px;
     cursor: pointer;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     transition: color 0.2s;
     z-index: 3001;
 }
@@ -1132,3 +1131,10 @@ body.instant-bg::before {
     color: var(--primary-pink);
 }
 
+
+/* Fix iOS bug where background-attachment: fixed makes the image massive */
+@supports (-webkit-touch-callout: none) {
+    .banner-section {
+        background-attachment: scroll;
+    }
+}

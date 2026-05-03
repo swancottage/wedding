@@ -144,18 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Scroll Sway Handler
-    let isScrolling;
-    window.addEventListener('scroll', () => {
-        const photos = document.querySelectorAll('.photo-card-item');
-        photos.forEach(photo => photo.classList.add('scrolling'));
-
-        clearTimeout(isScrolling);
-        isScrolling = setTimeout(() => {
-            photos.forEach(photo => photo.classList.remove('scrolling'));
-        }, 150); // Stop swaying 150ms after scroll stops
-    }, { passive: true });
-
     // Populate Schedule
     const scheduleGrid = document.getElementById('schedule-grid');
     ASSETS.events.forEach((event, i) => {
@@ -247,12 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const grayscale = (progress * 100).toFixed(1);
                 const contrast = (0.6 + (1 - progress) * 0.5).toFixed(2);
                 const brightness = (1.3 - (1 - progress) * 0.3).toFixed(2);
-                const scale = (1 + (1 - progress) * 0.1).toFixed(2);
 
                 photo.style.filter = `grayscale(${grayscale}%) contrast(${contrast}) brightness(${brightness})`;
-                // Maintain the original translateY from the populate phase
-                const currentTransform = photo.style.transform.split('scale')[0];
-                photo.style.transform = `${currentTransform} scale(${scale})`;
 
                 // Z-index based on proximity to center
                 photo.style.zIndex = Math.round((1 - progress) * 10);
@@ -304,6 +288,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (bannerSection) {
                 const newSrc = getRandomItem(ASSETS.bannerBanks);
                 bannerSection.style.backgroundImage = `url('${newSrc}')`;
+                
+                // Specific fix for wide3.JPG where faces are far apart
+                if (newSrc.includes('wide3.JPG')) {
+                    bannerSection.style.backgroundSize = 'contain';
+                    bannerSection.style.backgroundRepeat = 'no-repeat';
+                    // Optional: bannerSection.style.backgroundColor = 'var(--soft-beige)'; 
+                } else {
+                    bannerSection.style.backgroundSize = 'cover';
+                }
             }
         };
         updateBannerImage(); // Initial
