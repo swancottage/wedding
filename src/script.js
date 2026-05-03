@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.transform = `translateY(${yOffset}px)`;
                 card.innerHTML = `
                     <img src="${src}" alt="Moment" draggable="false">
-                    <div class="card-caption">Memoir ${i + 1}</div>
+                    <div class="card-caption"></div>
                 `;
                 galleryWires.appendChild(card);
             });
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (bannerSection) {
                 const newSrc = getRandomItem(ASSETS.bannerBanks);
                 bannerSection.style.backgroundImage = `url('${newSrc}')`;
-                
+
                 // Specific fix for wide3.JPG where faces are far apart
                 if (newSrc.includes('wide3.JPG')) {
                     bannerSection.style.backgroundSize = 'contain';

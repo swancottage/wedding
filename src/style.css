@@ -36,8 +36,8 @@ body::before {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
-    width: stretch;
+    height: 100dvh;
+    width: 100%;
     /* REPLACE 'your-photo.jpg' WITH YOUR ACTUAL PHOTO FILENAME IN src FOLDER */
     background-image: url('./celeb.png');
     background-size: cover;
@@ -664,7 +664,7 @@ body.instant-bg::before {
     text-transform: uppercase;
     letter-spacing: 5px;
     font-size: 1.2rem;
-    font-weight: 300;
+    font-weight: 500;
 }
 
 .big-date {
@@ -788,8 +788,9 @@ body.instant-bg::before {
 
 .sched-time {
     font-size: 1rem;
-    color: #382004;
+    color: #c3766c;
     font-weight: bold;
+    font-family: var(--font-sans);
     letter-spacing: 1px;
 }
 
@@ -840,7 +841,7 @@ body.instant-bg::before {
     font-family: var(--font-sans);
     /*letter-spacing: 4px;*/
     font-weight: 300;
-    font-size: 1.2rem;
+    font-style: italic;
     margin-bottom: 8px;
 }
 
@@ -1032,7 +1033,8 @@ body.instant-bg::before {
     letter-spacing: -0.05em;
     text-transform: uppercase;
     display: block;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
+    font-style: normal;
     /* color: var(--text-color); */
     opacity: 0.8;
 }
@@ -1050,7 +1052,7 @@ body.instant-bg::before {
     font-weight: 600;
     color: var(--pink-dark);
     margin-bottom: 10px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .theme-title {
