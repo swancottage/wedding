@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             './src/wide1.JPG', './src/wide2.JPG', './src/wide3.JPG', './src/wide4.JPG', './src/wide5.JPG'
         ],
         events: [
-            { icon: './src/mark.png', title: 'แห่ขันหมาก', time: '07:49 น.', desc: '' },
+            { icon: './src/mark.png', title: 'พิธีแห่ขันหมาก', time: '07:49 น.', desc: '' },
             { icon: './src/tea.png', title: 'พิธียกน้ำชา', time: '08:49 น.', desc: '' },
             { icon: './src/celeb.png', title: 'ฉลองมงคลสมรส', time: '12:00 น.', desc: '(Buffet)' }
         ]
